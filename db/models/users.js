@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const mongoose = require('mongoose');
 
 const schemaTypes = require('./schemaTypes');
@@ -19,4 +20,11 @@ const Users = mongoose.model('users', new Schema({
   updatedAt: schemaTypes.date({ select: false }),
 }, { timestamps: true }));
 
-module.exports.isValid = values => !Users.validateSync(values);
+module.exports.isValid = values => !Users(values).validateSync();
+
+module.exports.create = (values) => {
+  const user = _.omit(values, ['_id']);
+
+  return Users(user).save()
+    .then((createdUser) => Promise.resolve(_.omit(createdUser, ['authentication'])));
+};

@@ -12,13 +12,16 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: errorMessages.LOGIN_400 }).end();
     }
 
-    const existingUser = await db.Users.getByEmail(email);
+    const existingUser = await db.Users.getByEmail(email)
+      .select('+authentication.hashedPassword +authentication.salt');
 
     if (!existingUser) {
       return res.status(400).json({ message: errorMessages.LOGIN_400 }).end();
     }
 
-    if (existingUser.authentication.password !== hash.password(existingUser.authentication.salt, password)) {
+    // console.log(existingUser.authentication.salt, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', hash.password(existingUser.authentication.salt, password));
+
+    if (existingUser.authentication.hashedPassword !== hash.password(existingUser.authentication.salt, password)) {
       return res.status(400).json({ message: errorMessages.LOGIN_400 }).end();
     }
 

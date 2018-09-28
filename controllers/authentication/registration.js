@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     const salt = tokens.generate();
     user.authentication = {
       salt,
-      hashedPassword: hash.password(salt, user.password),
+      hashedPassword: hash.password(salt, user.authentication.password),
     };
 
     const createdUser = await db.Users.create(user);

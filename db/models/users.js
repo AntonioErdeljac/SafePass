@@ -14,8 +14,11 @@ const Users = mongoose.model('users', new Schema({
     hashedPassword: schemaTypes.string({ select: false }),
     salt: schemaTypes.string({ select: false }),
   },
+  contact: {
+    email: schemaTypes.string({ required: true }),
+  },
 
-  __v: schemaTypes.number(),
+  __v: schemaTypes.number({ select: false }),
   createdAt: schemaTypes.date({ select: false }),
   updatedAt: schemaTypes.date({ select: false }),
 }, { timestamps: true }));
@@ -26,5 +29,11 @@ module.exports.create = (values) => {
   const user = _.omit(values, ['_id']);
 
   return Users(user).save()
-    .then((createdUser) => Promise.resolve(_.omit(createdUser, ['authentication'])));
+    .then(createdUser => Promise.resolve(_.omit(createdUser.toObject(), ['authentication'])));
+};
+
+module.exports.getByEmail = (email) => {
+  const query = { 'contact.email': new RegExp(`^${_.escapeRegExp(_.trim(email))}$`, 'i') };
+
+  return Users.findOne(query);
 };

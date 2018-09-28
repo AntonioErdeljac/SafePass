@@ -1,4 +1,4 @@
-module.exports = (size = 10) => {
+module.exports.generate = (size = 10) => {
   let token = '';
   const possibleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 

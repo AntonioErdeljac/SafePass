@@ -8,6 +8,7 @@ const { secretTypes } = require('../../constants');
 const { Schema } = mongoose;
 
 const Secrets = mongoose.model('secrets', new Schema({
+  author: { ref: 'users', type: Schema.Types.ObjectId },
   content: {
     hashedSecret: schemaTypes.string({ select: false }),
     salt: schemaTypes.string({ select: false }),
@@ -27,4 +28,10 @@ module.exports.create = (values) => {
 
   return Secrets(secret).save()
     .then(createdSecret => Promise.resolve(_.omit(createdSecret.toObject(), ['content'])));
+};
+
+module.exports.findById = (id) => {
+  const query = { _id: id };
+
+  return Secrets.findOne(query);
 };

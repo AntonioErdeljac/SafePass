@@ -19,8 +19,6 @@ module.exports = async (req, res) => {
       return res.status(400).json({ message: errorMessages.LOGIN_400 }).end();
     }
 
-    // console.log(existingUser.authentication.salt, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', hash.password(existingUser.authentication.salt, password));
-
     if (existingUser.authentication.hashedPassword !== hash.password(existingUser.authentication.salt, password)) {
       return res.status(400).json({ message: errorMessages.LOGIN_400 }).end();
     }

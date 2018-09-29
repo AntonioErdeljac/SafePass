@@ -13,6 +13,7 @@ const Users = mongoose.model('users', new Schema({
   authentication: {
     hashedPassword: schemaTypes.string({ select: false }),
     salt: schemaTypes.string({ select: false }),
+    sessionToken: schemaTypes.string({ select: false }),
   },
   contact: {
     email: schemaTypes.string({ required: true }),
@@ -34,6 +35,12 @@ module.exports.create = (values) => {
 
 module.exports.getByEmail = (email) => {
   const query = { 'contact.email': new RegExp(`^${_.escapeRegExp(_.trim(email))}$`, 'i') };
+
+  return Users.findOne(query);
+};
+
+module.exports.getBySessionToken = (token) => {
+  const query = { 'authentication.sessionToken': token };
 
   return Users.findOne(query);
 };

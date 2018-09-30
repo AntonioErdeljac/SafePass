@@ -13,6 +13,7 @@ const Secrets = mongoose.model('secrets', new Schema({
     hashedSecret: schemaTypes.string({ select: false }),
     salt: schemaTypes.string({ select: false }),
   },
+  email: schemaTypes.string(),
   name: schemaTypes.string({ required: true }),
   type: schemaTypes.string({ enum: _.keys(secretTypes), required: true }),
 
